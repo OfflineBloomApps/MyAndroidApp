@@ -11,16 +11,16 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 
 @Composable
-fun HabitBloomApp(
-    vm: MainViewModel = viewModel(
+fun HabitBloomApp() {
+    // Получаем Application ВНЕ initializer
+    val app = LocalContext.current.applicationContext as Application
+
+    val vm: MainViewModel = viewModel(
         factory = viewModelFactory {
-            initializer {
-                val app = LocalContext.current.applicationContext as Application
-                MainViewModel(app)
-            }
+            initializer { MainViewModel(app) }
         }
     )
-) {
+
     val s by vm.state.collectAsState()
     MaterialTheme {
         MainScreen(
