@@ -12,7 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 
 @Composable
 fun HabitBloomApp() {
-    // Получаем Application ВНЕ initializer
+
     val app = LocalContext.current.applicationContext as Application
 
     val vm: MainViewModel = viewModel(
@@ -22,6 +22,7 @@ fun HabitBloomApp() {
     )
 
     val s by vm.state.collectAsState()
+
     MaterialTheme {
         MainScreen(
             state = s,
