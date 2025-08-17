@@ -6,9 +6,17 @@ import com.example.habitbloombasic.data.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-data class UiState(val items: List<HabitUi> = emptyList(), val showDialog: Boolean = false, val newTitle: String = "")
+data class UiState(
+    val items: List<HabitUi> = emptyList(),
+    val showDialog: Boolean = false,
+    val newTitle: String = "",
+    val xp: Int = 0,
+    val level: Int = 1,
+    val progress: Float = 0f   // 0..1 до следующего уровня
+)
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val repo = Repository(AppDatabase.get(app).habitDao())
@@ -17,9 +25,22 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     init {
         viewModelScope.launch {
-            repo.flow().collectLatest { list -> _s.value = _s.value.copy(items = repo.toUi(list)) }
+            combine(repo.flow(), repo.xpFlow()) { habits, xp ->
+                val items = repo.toUi(habits)
+                val level = xp / 7 + 1
+                val progress = (xp % 7) / 7f
+                Triple(items, xp, Pair(level, progress))
+            }.collectLatest { (items, xp, lp) ->
+                _s.value = _s.value.copy(
+                    items = items,
+                    xp = xp,
+                    level = lp.first,
+                    progress = lp.second
+                )
+            }
         }
     }
+
     fun addClick() { _s.value = _s.value.copy(showDialog = true, newTitle = "") }
     fun dismiss() { _s.value = _s.value.copy(showDialog = false, newTitle = "") }
     fun title(t: String) { _s.value = _s.value.copy(newTitle = t) }

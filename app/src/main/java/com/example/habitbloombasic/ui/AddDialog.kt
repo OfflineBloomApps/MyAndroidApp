@@ -1,13 +1,19 @@
 package com.example.habitbloombasic.ui
+
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.foundation.layout.fillMaxWidth
 import com.example.habitbloombasic.R
 
 @Composable
-fun AddDialog(title: String, onTitleChange: (String) -> Unit, onDismiss: () -> Unit, onSave: () -> Unit) {
+fun AddDialog(
+    title: String,
+    onTitleChange: (String) -> Unit,
+    onDismiss: () -> Unit,
+    onSave: () -> Unit
+) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.add_habit)) },
