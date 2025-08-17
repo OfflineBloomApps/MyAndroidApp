@@ -22,9 +22,16 @@ fun MainScreen(
     onAddConfirm: () -> Unit,
     onDialogDismiss: () -> Unit
 ) {
-    Scaffold(floatingActionButton = { FloatingActionButton(onClick = onAddClick) { Text("+") } }) { pad ->
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = onAddClick) { Text("+") }
+        }
+    ) { pad ->
         if (state.items.isEmpty()) {
-            Box(Modifier.fillMaxSize().padding(pad), contentAlignment = Alignment.Center) {
+            Box(
+                Modifier.fillMaxSize().padding(pad),
+                contentAlignment = Alignment.Center
+            ) {
                 Text(stringResource(R.string.empty_hint))
             }
         } else {
@@ -40,6 +47,7 @@ fun MainScreen(
             }
         }
     }
+
     if (state.showDialog) {
         AddDialog(
             title = state.newTitle,
@@ -51,9 +59,18 @@ fun MainScreen(
 }
 
 @Composable
-private fun RowItem(item: HabitUi, onToggle: () -> Unit, onDelete: () -> Unit) {
-    Card(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
-        Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+private fun RowItem(
+    item: HabitUi,
+    onToggle: () -> Unit,
+    onDelete: () -> Unit
+) {
+    Card(
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column(Modifier.weight(1f)) {
                 Text(item.title, style = MaterialTheme.typography.titleMedium)
                 Text("Стрик: ${item.streak}", style = MaterialTheme.typography.bodySmall)
