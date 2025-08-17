@@ -101,7 +101,7 @@ private fun RowItem(item: HabitUi, onToggle: () -> Unit, onDelete: () -> Unit) {
         ) {
             Column(Modifier.weight(1f)) {
                 Text(item.title, style = MaterialTheme.typography.titleMedium)
-                Text("Стрик: ${item.streak}", style = MaterialTheme.typTypography.bodySmall)
+                Text("Стрик: ${item.streak}", style = MaterialTheme.typography.bodySmall)
             }
             Column(horizontalAlignment = Alignment.End) {
                 Row(verticalAlignment = Alignment.CenterVertically) {

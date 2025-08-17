@@ -6,4 +6,6 @@
     <string name="cancel">Отмена</string>
     <string name="empty_hint">Нажмите + чтобы добавить первую привычку</string>
     <string name="checked_today">Сегодня отмечено</string>
+    <string name="ok">OK</string>
+
 </resources>

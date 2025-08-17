@@ -1,0 +1,150 @@
+<html>
+<head>
+<title>MainScreen.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+.s5 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MainScreen.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">habitbloombasic</span><span class="s2">.</span><span class="s1">ui</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">foundation</span><span class="s2">.</span><span class="s1">Canvas</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">foundation</span><span class="s2">.</span><span class="s1">layout</span><span class="s2">.*</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">foundation</span><span class="s2">.</span><span class="s1">lazy</span><span class="s2">.</span><span class="s1">LazyColumn</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">foundation</span><span class="s2">.</span><span class="s1">lazy</span><span class="s2">.</span><span class="s1">items</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">material3</span><span class="s2">.*</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">runtime</span><span class="s2">.</span><span class="s1">Composable</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">runtime</span><span class="s2">.</span><span class="s1">getValue</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">animation</span><span class="s2">.</span><span class="s1">core</span><span class="s2">.</span><span class="s1">animateFloatAsState</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">Alignment</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">Modifier</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">geometry</span><span class="s2">.</span><span class="s1">Offset</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">graphics</span><span class="s2">.</span><span class="s1">Color</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">graphics</span><span class="s2">.</span><span class="s1">drawscope</span><span class="s2">.</span><span class="s1">rotate</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">res</span><span class="s2">.</span><span class="s1">stringResource</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">unit</span><span class="s2">.</span><span class="s1">dp</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">habitbloombasic</span><span class="s2">.</span><span class="s1">R</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">habitbloombasic</span><span class="s2">.</span><span class="s1">data</span><span class="s2">.</span><span class="s1">HabitUi</span>
+<span class="s1">import kotlin</span><span class="s2">.</span><span class="s1">math</span><span class="s2">.</span><span class="s1">min</span>
+
+<span class="s1">@Composable</span>
+<span class="s0">fun </span><span class="s1">MainScreen</span><span class="s2">(</span>
+    <span class="s1">state: UiState</span><span class="s2">,</span>
+    <span class="s1">onToggle: </span><span class="s2">(</span><span class="s1">Int</span><span class="s2">) -&gt; </span><span class="s1">Unit</span><span class="s2">,</span>
+    <span class="s1">onAddClick: </span><span class="s2">() -&gt; </span><span class="s1">Unit</span><span class="s2">,</span>
+    <span class="s1">onDelete: </span><span class="s2">(</span><span class="s1">Int</span><span class="s2">) -&gt; </span><span class="s1">Unit</span><span class="s2">,</span>
+    <span class="s1">onTitleChange: </span><span class="s2">(</span><span class="s1">String</span><span class="s2">) -&gt; </span><span class="s1">Unit</span><span class="s2">,</span>
+    <span class="s1">onAddConfirm: </span><span class="s2">() -&gt; </span><span class="s1">Unit</span><span class="s2">,</span>
+    <span class="s1">onDialogDismiss: </span><span class="s2">() -&gt; </span><span class="s1">Unit</span>
+<span class="s2">) {</span>
+    <span class="s1">Scaffold</span><span class="s2">(</span>
+        <span class="s1">floatingActionButton </span><span class="s2">= { </span><span class="s1">FloatingActionButton</span><span class="s2">(</span><span class="s1">onClick </span><span class="s2">= </span><span class="s1">onAddClick</span><span class="s2">) { </span><span class="s1">Text</span><span class="s2">(</span><span class="s3">&quot;+&quot;</span><span class="s2">) } }</span>
+    <span class="s2">) { </span><span class="s1">pad </span><span class="s2">-&gt;</span>
+        <span class="s1">Column</span><span class="s2">(</span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">fillMaxSize</span><span class="s2">().</span><span class="s1">padding</span><span class="s2">(</span><span class="s1">pad</span><span class="s2">)) {</span>
+            <span class="s1">FlowerHeader</span><span class="s2">(</span><span class="s1">level </span><span class="s2">= </span><span class="s1">state</span><span class="s2">.</span><span class="s1">level</span><span class="s2">, </span><span class="s1">progress </span><span class="s2">= </span><span class="s1">state</span><span class="s2">.</span><span class="s1">progress</span><span class="s2">)</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">state</span><span class="s2">.</span><span class="s1">items</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+                <span class="s1">Box</span><span class="s2">(</span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">fillMaxSize</span><span class="s2">().</span><span class="s1">weight</span><span class="s2">(</span><span class="s4">1f</span><span class="s2">), </span><span class="s1">contentAlignment </span><span class="s2">= </span><span class="s1">Alignment</span><span class="s2">.</span><span class="s1">Center</span><span class="s2">) {</span>
+                    <span class="s1">Text</span><span class="s2">(</span><span class="s1">stringResource</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">string</span><span class="s2">.</span><span class="s1">empty_hint</span><span class="s2">))</span>
+                <span class="s2">}</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">LazyColumn</span><span class="s2">(</span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">fillMaxWidth</span><span class="s2">().</span><span class="s1">weight</span><span class="s2">(</span><span class="s4">1f</span><span class="s2">)) {</span>
+                    <span class="s1">items</span><span class="s2">(</span><span class="s1">state</span><span class="s2">.</span><span class="s1">items</span><span class="s2">) { </span><span class="s1">it </span><span class="s2">-&gt;</span>
+                        <span class="s1">RowItem</span><span class="s2">(</span><span class="s1">it</span><span class="s2">, </span><span class="s1">onToggle </span><span class="s2">= { </span><span class="s1">onToggle</span><span class="s2">(</span><span class="s1">it</span><span class="s2">.</span><span class="s1">id</span><span class="s2">) }, </span><span class="s1">onDelete </span><span class="s2">= { </span><span class="s1">onDelete</span><span class="s2">(</span><span class="s1">it</span><span class="s2">.</span><span class="s1">id</span><span class="s2">) })</span>
+                    <span class="s2">}</span>
+                    <span class="s1">item </span><span class="s2">{ </span><span class="s1">Spacer</span><span class="s2">(</span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">height</span><span class="s2">(</span><span class="s4">80</span><span class="s2">.</span><span class="s1">dp</span><span class="s2">)) }</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">if </span><span class="s2">(</span><span class="s1">state</span><span class="s2">.</span><span class="s1">showDialog</span><span class="s2">) {</span>
+        <span class="s1">AddDialog</span><span class="s2">(</span>
+            <span class="s1">title </span><span class="s2">= </span><span class="s1">state</span><span class="s2">.</span><span class="s1">newTitle</span><span class="s2">,</span>
+            <span class="s1">onTitleChange </span><span class="s2">= </span><span class="s1">onTitleChange</span><span class="s2">,</span>
+            <span class="s1">onDismiss </span><span class="s2">= </span><span class="s1">onDialogDismiss</span><span class="s2">,</span>
+            <span class="s1">onSave </span><span class="s2">= </span><span class="s1">onAddConfirm</span>
+        <span class="s2">)</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s1">@Composable</span>
+<span class="s1">private </span><span class="s0">fun </span><span class="s1">FlowerHeader</span><span class="s2">(</span><span class="s1">level: Int</span><span class="s2">, </span><span class="s1">progress: Float</span><span class="s2">) {</span>
+    <span class="s0">val </span><span class="s1">p by animateFloatAsState</span><span class="s2">(</span><span class="s1">targetValue </span><span class="s2">= </span><span class="s1">progress</span><span class="s2">, </span><span class="s1">label </span><span class="s2">= </span><span class="s3">&quot;progress&quot;</span><span class="s2">)</span>
+    <span class="s1">Column</span><span class="s2">(</span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">fillMaxWidth</span><span class="s2">().</span><span class="s1">padding</span><span class="s2">(</span><span class="s4">16</span><span class="s2">.</span><span class="s1">dp</span><span class="s2">), </span><span class="s1">horizontalAlignment </span><span class="s2">= </span><span class="s1">Alignment</span><span class="s2">.</span><span class="s1">CenterHorizontally</span><span class="s2">) {</span>
+        <span class="s1">Flower</span><span class="s2">(</span><span class="s1">level </span><span class="s2">= </span><span class="s1">level</span><span class="s2">, </span><span class="s1">growth </span><span class="s2">= </span><span class="s1">p</span><span class="s2">)</span>
+        <span class="s1">Spacer</span><span class="s2">(</span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">height</span><span class="s2">(</span><span class="s4">8</span><span class="s2">.</span><span class="s1">dp</span><span class="s2">))</span>
+        <span class="s1">LinearProgressIndicator</span><span class="s2">(</span><span class="s1">progress </span><span class="s2">= { </span><span class="s1">p </span><span class="s2">}, </span><span class="s1">modifier </span><span class="s2">= </span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">fillMaxWidth</span><span class="s2">())</span>
+        <span class="s1">Spacer</span><span class="s2">(</span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">height</span><span class="s2">(</span><span class="s4">4</span><span class="s2">.</span><span class="s1">dp</span><span class="s2">))</span>
+        <span class="s1">Text</span><span class="s2">(</span><span class="s3">&quot;Уровень </span><span class="s0">$</span><span class="s1">level </span><span class="s3">• прогресс </span><span class="s0">${</span><span class="s2">(</span><span class="s1">p </span><span class="s2">* </span><span class="s4">100</span><span class="s2">).</span><span class="s1">toInt</span><span class="s2">()</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s2">)</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s1">@Composable</span>
+<span class="s1">private </span><span class="s0">fun </span><span class="s1">Flower</span><span class="s2">(</span><span class="s1">level: Int</span><span class="s2">, </span><span class="s1">growth: Float</span><span class="s2">) {</span>
+    <span class="s5">// Размер растёт с уровнем и немного с прогрессом</span>
+    <span class="s0">val </span><span class="s1">size </span><span class="s2">= (</span><span class="s4">120 </span><span class="s2">+ </span><span class="s1">min</span><span class="s2">(</span><span class="s1">level </span><span class="s2">* </span><span class="s4">10</span><span class="s2">, </span><span class="s4">120</span><span class="s2">)).</span><span class="s1">dp</span>
+    <span class="s0">val </span><span class="s1">petals </span><span class="s2">= </span><span class="s1">min</span><span class="s2">(</span><span class="s4">6 </span><span class="s2">+ </span><span class="s1">level </span><span class="s2">/ </span><span class="s4">2</span><span class="s2">, </span><span class="s4">12</span><span class="s2">)</span>
+    <span class="s0">val </span><span class="s1">scale </span><span class="s2">= </span><span class="s4">0.85f </span><span class="s2">+ </span><span class="s4">0.25f </span><span class="s2">* </span><span class="s1">growth</span>
+
+    <span class="s1">Canvas</span><span class="s2">(</span><span class="s1">modifier </span><span class="s2">= </span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">size</span><span class="s2">(</span><span class="s1">size</span><span class="s2">)) {</span>
+        <span class="s0">val </span><span class="s1">c </span><span class="s2">= </span><span class="s1">Offset</span><span class="s2">(</span><span class="s1">size</span><span class="s2">.</span><span class="s1">minDimension</span><span class="s2">.</span><span class="s1">toPx</span><span class="s2">() / </span><span class="s4">2</span><span class="s2">, </span><span class="s1">size</span><span class="s2">.</span><span class="s1">minDimension</span><span class="s2">.</span><span class="s1">toPx</span><span class="s2">() / </span><span class="s4">2</span><span class="s2">)</span>
+        <span class="s0">val </span><span class="s1">base </span><span class="s2">= </span><span class="s1">size</span><span class="s2">.</span><span class="s1">minDimension</span><span class="s2">.</span><span class="s1">toPx</span><span class="s2">() * </span><span class="s4">0.28f </span><span class="s2">* </span><span class="s1">scale</span>
+
+        <span class="s5">// стебель</span>
+        <span class="s1">drawRect</span><span class="s2">(</span>
+            <span class="s1">color </span><span class="s2">= </span><span class="s1">Color</span><span class="s2">(</span><span class="s4">0xFF2E7D32</span><span class="s2">),</span>
+            <span class="s1">topLeft </span><span class="s2">= </span><span class="s1">Offset</span><span class="s2">(</span><span class="s1">c</span><span class="s2">.</span><span class="s1">x </span><span class="s2">- </span><span class="s1">base </span><span class="s2">* </span><span class="s4">0.06f</span><span class="s2">, </span><span class="s1">c</span><span class="s2">.</span><span class="s1">y</span><span class="s2">),</span>
+            <span class="s1">size </span><span class="s2">= </span><span class="s1">androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">geometry</span><span class="s2">.</span><span class="s1">Size</span><span class="s2">(</span><span class="s1">base </span><span class="s2">* </span><span class="s4">0.12f</span><span class="s2">, </span><span class="s1">base </span><span class="s2">* </span><span class="s4">1.4f</span><span class="s2">)</span>
+        <span class="s2">)</span>
+
+        <span class="s5">// листья</span>
+        <span class="s1">drawCircle</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">(</span><span class="s4">0xFF388E3C</span><span class="s2">), </span><span class="s1">radius </span><span class="s2">= </span><span class="s1">base </span><span class="s2">* </span><span class="s4">0.35f</span><span class="s2">, </span><span class="s1">center </span><span class="s2">= </span><span class="s1">Offset</span><span class="s2">(</span><span class="s1">c</span><span class="s2">.</span><span class="s1">x </span><span class="s2">- </span><span class="s1">base </span><span class="s2">* </span><span class="s4">0.5f</span><span class="s2">, </span><span class="s1">c</span><span class="s2">.</span><span class="s1">y </span><span class="s2">+ </span><span class="s1">base </span><span class="s2">* </span><span class="s4">0.7f</span><span class="s2">))</span>
+        <span class="s1">drawCircle</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">(</span><span class="s4">0xFF388E3C</span><span class="s2">), </span><span class="s1">radius </span><span class="s2">= </span><span class="s1">base </span><span class="s2">* </span><span class="s4">0.35f</span><span class="s2">, </span><span class="s1">center </span><span class="s2">= </span><span class="s1">Offset</span><span class="s2">(</span><span class="s1">c</span><span class="s2">.</span><span class="s1">x </span><span class="s2">+ </span><span class="s1">base </span><span class="s2">* </span><span class="s4">0.5f</span><span class="s2">, </span><span class="s1">c</span><span class="s2">.</span><span class="s1">y </span><span class="s2">+ </span><span class="s1">base </span><span class="s2">* </span><span class="s4">0.8f</span><span class="s2">))</span>
+
+        <span class="s5">// лепестки</span>
+        <span class="s1">repeat</span><span class="s2">(</span><span class="s1">petals</span><span class="s2">) { </span><span class="s1">i </span><span class="s2">-&gt;</span>
+            <span class="s1">rotate</span><span class="s2">(</span><span class="s1">degrees </span><span class="s2">= </span><span class="s1">i </span><span class="s2">* (</span><span class="s4">360f </span><span class="s2">/ </span><span class="s1">petals</span><span class="s2">), </span><span class="s1">pivot </span><span class="s2">= </span><span class="s1">c</span><span class="s2">) {</span>
+                <span class="s1">drawCircle</span><span class="s2">(</span>
+                    <span class="s1">color </span><span class="s2">= </span><span class="s1">Color</span><span class="s2">(</span><span class="s4">0xFFF48FB1</span><span class="s2">),</span>
+                    <span class="s1">radius </span><span class="s2">= </span><span class="s1">base</span><span class="s2">,</span>
+                    <span class="s1">center </span><span class="s2">= </span><span class="s1">Offset</span><span class="s2">(</span><span class="s1">c</span><span class="s2">.</span><span class="s1">x</span><span class="s2">, </span><span class="s1">c</span><span class="s2">.</span><span class="s1">y </span><span class="s2">- </span><span class="s1">base </span><span class="s2">* </span><span class="s4">1.2f</span><span class="s2">)</span>
+                <span class="s2">)</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+        <span class="s5">// сердцевина</span>
+        <span class="s1">drawCircle</span><span class="s2">(</span><span class="s1">color </span><span class="s2">= </span><span class="s1">Color</span><span class="s2">(</span><span class="s4">0xFFFFD54F</span><span class="s2">), </span><span class="s1">radius </span><span class="s2">= </span><span class="s1">base </span><span class="s2">* </span><span class="s4">0.7f</span><span class="s2">, </span><span class="s1">center </span><span class="s2">= </span><span class="s1">c</span><span class="s2">)</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+<span class="s1">@Composable</span>
+<span class="s1">private </span><span class="s0">fun </span><span class="s1">RowItem</span><span class="s2">(</span><span class="s1">item: HabitUi</span><span class="s2">, </span><span class="s1">onToggle: </span><span class="s2">() -&gt; </span><span class="s1">Unit</span><span class="s2">, </span><span class="s1">onDelete: </span><span class="s2">() -&gt; </span><span class="s1">Unit</span><span class="s2">) {</span>
+    <span class="s1">Card</span><span class="s2">(</span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">fillMaxWidth</span><span class="s2">().</span><span class="s1">padding</span><span class="s2">(</span><span class="s1">horizontal </span><span class="s2">= </span><span class="s4">16</span><span class="s2">.</span><span class="s1">dp</span><span class="s2">, </span><span class="s1">vertical </span><span class="s2">= </span><span class="s4">8</span><span class="s2">.</span><span class="s1">dp</span><span class="s2">)) {</span>
+        <span class="s1">Row</span><span class="s2">(</span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">fillMaxWidth</span><span class="s2">().</span><span class="s1">padding</span><span class="s2">(</span><span class="s4">16</span><span class="s2">.</span><span class="s1">dp</span><span class="s2">), </span><span class="s1">verticalAlignment </span><span class="s2">= </span><span class="s1">Alignment</span><span class="s2">.</span><span class="s1">CenterVertically</span><span class="s2">) {</span>
+            <span class="s1">Column</span><span class="s2">(</span><span class="s1">Modifier</span><span class="s2">.</span><span class="s1">weight</span><span class="s2">(</span><span class="s4">1f</span><span class="s2">)) {</span>
+                <span class="s1">Text</span><span class="s2">(</span><span class="s1">item</span><span class="s2">.</span><span class="s1">title</span><span class="s2">, </span><span class="s1">style </span><span class="s2">= </span><span class="s1">MaterialTheme</span><span class="s2">.</span><span class="s1">typography</span><span class="s2">.</span><span class="s1">titleMedium</span><span class="s2">)</span>
+                <span class="s1">Text</span><span class="s2">(</span><span class="s3">&quot;Стрик: </span><span class="s0">${</span><span class="s1">item</span><span class="s2">.</span><span class="s1">streak</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s2">, </span><span class="s1">style </span><span class="s2">= </span><span class="s1">MaterialTheme</span><span class="s2">.</span><span class="s1">typography</span><span class="s2">.</span><span class="s1">bodySmall</span><span class="s2">)</span>
+            <span class="s2">}</span>
+            <span class="s1">Column</span><span class="s2">(</span><span class="s1">horizontalAlignment </span><span class="s2">= </span><span class="s1">Alignment</span><span class="s2">.</span><span class="s1">End</span><span class="s2">) {</span>
+                <span class="s1">Row</span><span class="s2">(</span><span class="s1">verticalAlignment </span><span class="s2">= </span><span class="s1">Alignment</span><span class="s2">.</span><span class="s1">CenterVertically</span><span class="s2">) {</span>
+                    <span class="s1">Text</span><span class="s2">(</span><span class="s1">text </span><span class="s2">= </span><span class="s1">stringResource</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">string</span><span class="s2">.</span><span class="s1">checked_today</span><span class="s2">))</span>
+                    <span class="s1">Switch</span><span class="s2">(</span><span class="s1">checked </span><span class="s2">= </span><span class="s1">item</span><span class="s2">.</span><span class="s1">checkedToday</span><span class="s2">, </span><span class="s1">onCheckedChange </span><span class="s2">= { </span><span class="s1">onToggle</span><span class="s2">() })</span>
+                <span class="s2">}</span>
+                <span class="s1">TextButton</span><span class="s2">(</span><span class="s1">onClick </span><span class="s2">= </span><span class="s1">onDelete</span><span class="s2">) { </span><span class="s1">Text</span><span class="s2">(</span><span class="s3">&quot;Удалить&quot;</span><span class="s2">) }</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>App.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+App.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">habitbloombasic</span><span class="s2">.</span><span class="s1">ui</span>
+
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">app</span><span class="s2">.</span><span class="s1">Application</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">material3</span><span class="s2">.</span><span class="s1">MaterialTheme</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">runtime</span><span class="s2">.</span><span class="s1">Composable</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">runtime</span><span class="s2">.</span><span class="s1">collectAsState</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">runtime</span><span class="s2">.</span><span class="s1">getValue</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">platform</span><span class="s2">.</span><span class="s1">LocalContext</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">lifecycle</span><span class="s2">.</span><span class="s1">viewmodel</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">viewModel</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">lifecycle</span><span class="s2">.</span><span class="s1">viewmodel</span><span class="s2">.</span><span class="s1">initializer</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">lifecycle</span><span class="s2">.</span><span class="s1">viewmodel</span><span class="s2">.</span><span class="s1">viewModelFactory</span>
+
+<span class="s1">@Composable</span>
+<span class="s0">fun </span><span class="s1">HabitBloomApp</span><span class="s2">() {</span>
+    <span class="s3">// Получаем Application ВНЕ initializer</span>
+    <span class="s0">val </span><span class="s1">app </span><span class="s2">= </span><span class="s1">LocalContext</span><span class="s2">.</span><span class="s1">current</span><span class="s2">.</span><span class="s1">applicationContext </span><span class="s0">as </span><span class="s1">Application</span>
+
+    <span class="s0">val </span><span class="s1">vm: MainViewModel </span><span class="s2">= </span><span class="s1">viewModel</span><span class="s2">(</span>
+        <span class="s1">factory </span><span class="s2">= </span><span class="s1">viewModelFactory </span><span class="s2">{</span>
+            <span class="s1">initializer </span><span class="s2">{ </span><span class="s1">MainViewModel</span><span class="s2">(</span><span class="s1">app</span><span class="s2">) }</span>
+        <span class="s2">}</span>
+    <span class="s2">)</span>
+
+    <span class="s0">val </span><span class="s1">s by vm</span><span class="s2">.</span><span class="s1">state</span><span class="s2">.</span><span class="s1">collectAsState</span><span class="s2">()</span>
+    <span class="s1">MaterialTheme </span><span class="s2">{</span>
+        <span class="s1">MainScreen</span><span class="s2">(</span>
+            <span class="s1">state </span><span class="s2">= </span><span class="s1">s</span><span class="s2">,</span>
+            <span class="s1">onToggle </span><span class="s2">= </span><span class="s1">vm::toggle</span><span class="s2">,</span>
+            <span class="s1">onAddClick </span><span class="s2">= </span><span class="s1">vm::addClick</span><span class="s2">,</span>
+            <span class="s1">onDelete </span><span class="s2">= </span><span class="s1">vm::delete</span><span class="s2">,</span>
+            <span class="s1">onTitleChange </span><span class="s2">= </span><span class="s1">vm::title</span><span class="s2">,</span>
+            <span class="s1">onAddConfirm </span><span class="s2">= </span><span class="s1">vm::add</span><span class="s2">,</span>
+            <span class="s1">onDialogDismiss </span><span class="s2">= </span><span class="s1">vm::dismiss</span>
+        <span class="s2">)</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

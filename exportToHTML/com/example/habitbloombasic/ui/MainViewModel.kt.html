@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>MainViewModel.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+.s5 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MainViewModel.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">habitbloombasic</span><span class="s2">.</span><span class="s1">ui</span>
+<span class="s1">import android</span><span class="s2">.</span><span class="s1">app</span><span class="s2">.</span><span class="s1">Application</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">lifecycle</span><span class="s2">.</span><span class="s1">AndroidViewModel</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">lifecycle</span><span class="s2">.</span><span class="s1">viewModelScope</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">habitbloombasic</span><span class="s2">.</span><span class="s1">data</span><span class="s2">.*</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">.</span><span class="s1">MutableStateFlow</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">.</span><span class="s1">asStateFlow</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">.</span><span class="s1">collectLatest</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">.</span><span class="s1">combine</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">launch</span>
+
+<span class="s1">data </span><span class="s0">class </span><span class="s1">UiState</span><span class="s2">(</span>
+    <span class="s0">val </span><span class="s1">items: List</span><span class="s2">&lt;</span><span class="s1">HabitUi</span><span class="s2">&gt; = </span><span class="s1">emptyList</span><span class="s2">(),</span>
+    <span class="s0">val </span><span class="s1">showDialog: Boolean </span><span class="s2">= </span><span class="s0">false</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">newTitle: String </span><span class="s2">= </span><span class="s3">&quot;&quot;</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">xp: Int </span><span class="s2">= </span><span class="s4">0</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">level: Int </span><span class="s2">= </span><span class="s4">1</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">progress: Float </span><span class="s2">= </span><span class="s4">0f   </span><span class="s5">// 0..1 до следующего уровня</span>
+<span class="s2">)</span>
+
+<span class="s0">class </span><span class="s1">MainViewModel</span><span class="s2">(</span><span class="s1">app: Application</span><span class="s2">) </span><span class="s1">: AndroidViewModel</span><span class="s2">(</span><span class="s1">app</span><span class="s2">) {</span>
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">repo </span><span class="s2">= </span><span class="s1">Repository</span><span class="s2">(</span><span class="s1">AppDatabase</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s1">app</span><span class="s2">).</span><span class="s1">habitDao</span><span class="s2">())</span>
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">_s </span><span class="s2">= </span><span class="s1">MutableStateFlow</span><span class="s2">(</span><span class="s1">UiState</span><span class="s2">())</span>
+    <span class="s0">val </span><span class="s1">state </span><span class="s2">= </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">asStateFlow</span><span class="s2">()</span>
+
+    <span class="s1">init </span><span class="s2">{</span>
+        <span class="s1">viewModelScope</span><span class="s2">.</span><span class="s1">launch </span><span class="s2">{</span>
+            <span class="s1">combine</span><span class="s2">(</span><span class="s1">repo</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">(), </span><span class="s1">repo</span><span class="s2">.</span><span class="s1">xpFlow</span><span class="s2">()) { </span><span class="s1">habits</span><span class="s2">, </span><span class="s1">xp </span><span class="s2">-&gt;</span>
+                <span class="s0">val </span><span class="s1">items </span><span class="s2">= </span><span class="s1">repo</span><span class="s2">.</span><span class="s1">toUi</span><span class="s2">(</span><span class="s1">habits</span><span class="s2">)</span>
+                <span class="s0">val </span><span class="s1">level </span><span class="s2">= </span><span class="s1">xp </span><span class="s2">/ </span><span class="s4">7 </span><span class="s2">+ </span><span class="s4">1</span>
+                <span class="s0">val </span><span class="s1">progress </span><span class="s2">= (</span><span class="s1">xp </span><span class="s2">% </span><span class="s4">7</span><span class="s2">) / </span><span class="s4">7f</span>
+                <span class="s1">Triple</span><span class="s2">(</span><span class="s1">items</span><span class="s2">, </span><span class="s1">xp</span><span class="s2">, </span><span class="s1">Pair</span><span class="s2">(</span><span class="s1">level</span><span class="s2">, </span><span class="s1">progress</span><span class="s2">))</span>
+            <span class="s2">}.</span><span class="s1">collectLatest </span><span class="s2">{ (</span><span class="s1">items</span><span class="s2">, </span><span class="s1">xp</span><span class="s2">, </span><span class="s1">lp</span><span class="s2">) -&gt;</span>
+                <span class="s1">_s</span><span class="s2">.</span><span class="s1">value </span><span class="s2">= </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value</span><span class="s2">.</span><span class="s1">copy</span><span class="s2">(</span>
+                    <span class="s1">items </span><span class="s2">= </span><span class="s1">items</span><span class="s2">,</span>
+                    <span class="s1">xp </span><span class="s2">= </span><span class="s1">xp</span><span class="s2">,</span>
+                    <span class="s1">level </span><span class="s2">= </span><span class="s1">lp</span><span class="s2">.</span><span class="s1">first</span><span class="s2">,</span>
+                    <span class="s1">progress </span><span class="s2">= </span><span class="s1">lp</span><span class="s2">.</span><span class="s1">second</span>
+                <span class="s2">)</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">fun </span><span class="s1">addClick</span><span class="s2">() { </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value </span><span class="s2">= </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value</span><span class="s2">.</span><span class="s1">copy</span><span class="s2">(</span><span class="s1">showDialog </span><span class="s2">= </span><span class="s0">true</span><span class="s2">, </span><span class="s1">newTitle </span><span class="s2">= </span><span class="s3">&quot;&quot;</span><span class="s2">) }</span>
+    <span class="s0">fun </span><span class="s1">dismiss</span><span class="s2">() { </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value </span><span class="s2">= </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value</span><span class="s2">.</span><span class="s1">copy</span><span class="s2">(</span><span class="s1">showDialog </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">newTitle </span><span class="s2">= </span><span class="s3">&quot;&quot;</span><span class="s2">) }</span>
+    <span class="s0">fun </span><span class="s1">title</span><span class="s2">(</span><span class="s1">t: String</span><span class="s2">) { </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value </span><span class="s2">= </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value</span><span class="s2">.</span><span class="s1">copy</span><span class="s2">(</span><span class="s1">newTitle </span><span class="s2">= </span><span class="s1">t</span><span class="s2">) }</span>
+    <span class="s0">fun </span><span class="s1">add</span><span class="s2">() {</span>
+        <span class="s0">val </span><span class="s1">t </span><span class="s2">= </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value</span><span class="s2">.</span><span class="s1">newTitle</span><span class="s2">.</span><span class="s1">trim</span><span class="s2">(); </span><span class="s0">if </span><span class="s2">(</span><span class="s1">t</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) </span><span class="s0">return</span>
+        <span class="s1">viewModelScope</span><span class="s2">.</span><span class="s1">launch </span><span class="s2">{ </span><span class="s1">repo</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">t</span><span class="s2">); </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value </span><span class="s2">= </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value</span><span class="s2">.</span><span class="s1">copy</span><span class="s2">(</span><span class="s1">showDialog </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">newTitle </span><span class="s2">= </span><span class="s3">&quot;&quot;</span><span class="s2">) }</span>
+    <span class="s2">}</span>
+    <span class="s0">fun </span><span class="s1">toggle</span><span class="s2">(</span><span class="s1">id: Int</span><span class="s2">) { </span><span class="s1">viewModelScope</span><span class="s2">.</span><span class="s1">launch </span><span class="s2">{ </span><span class="s1">repo</span><span class="s2">.</span><span class="s1">toggleToday</span><span class="s2">(</span><span class="s1">id</span><span class="s2">) } }</span>
+    <span class="s0">fun </span><span class="s1">delete</span><span class="s2">(</span><span class="s1">id: Int</span><span class="s2">) {</span>
+        <span class="s0">val </span><span class="s1">title </span><span class="s2">= </span><span class="s1">_s</span><span class="s2">.</span><span class="s1">value</span><span class="s2">.</span><span class="s1">items</span><span class="s2">.</span><span class="s1">firstOrNull </span><span class="s2">{ </span><span class="s1">it</span><span class="s2">.</span><span class="s1">id </span><span class="s2">== </span><span class="s1">id </span><span class="s2">}</span><span class="s1">?</span><span class="s2">.</span><span class="s1">title ?: </span><span class="s3">&quot;&quot;</span>
+        <span class="s1">viewModelScope</span><span class="s2">.</span><span class="s1">launch </span><span class="s2">{ </span><span class="s1">repo</span><span class="s2">.</span><span class="s1">del</span><span class="s2">(</span><span class="s1">id</span><span class="s2">, </span><span class="s1">title</span><span class="s2">) }</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>
