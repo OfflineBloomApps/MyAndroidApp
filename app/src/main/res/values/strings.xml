@@ -1,11 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Application name -->
     <string name="app_name">HabitBloom</string>
+
+    <!-- Dialog and button labels -->
     <string name="add_habit">Добавить привычку</string>
     <string name="habit_title">Название привычки</string>
     <string name="save">Сохранить</string>
     <string name="cancel">Отмена</string>
-    <string name="empty_hint">Нажмите + чтобы добавить первую привычку</string>
-    <string name="checked_today">Сегодня отмечено</string>
     <string name="ok">OK</string>
 
+    <string name="last_completed">Last completed: %1$s</string>
+
+    <string name="xp_format">XP: %1$d</string>
+
+    <!-- Hint shown when there are no habits yet -->
+    <string name="empty_hint">Нажмите + чтобы добавить первую привычку</string>
+
+    <!-- Text displayed when a habit has been checked today -->
+    <string name="checked_today">Сегодня отмечено</string>
+
+    <!-- Format for displaying current XP and last mark date. The first argument is
+         an integer XP value, the second a date string. Example: "XP: 5 | Последняя
+         отметка: 18.08.2025". -->
+    <string name="xp_and_last_mark">XP: %1$d | Последняя отметка: %2$s</string>
+
+    <!-- Placeholder for no date available -->
+    <string name="no_date">Нет</string>
+
+    <!-- Format for displaying a habit streak. Example: "Streak: 3". -->
+    <string name="streak_format">Серия: %1$d</string>
+
+    <!-- Content description for delete icon -->
+    <string name="delete">Удалить</string>
 </resources>
