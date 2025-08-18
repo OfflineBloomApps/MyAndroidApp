@@ -4,8 +4,7 @@ import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Репозиторий оборачивает DAO и предоставляет простые потоки и методы.
- * XP и уровни рассчитываются в ViewModel, здесь лишь извлечение данных.
+ * Репозиторий оборачивает DAO, предоставляет потоки уникальных дней и последней отметки.
  */
 data class HabitUi(val id: Int, val title: String, val checkedToday: Boolean, val streak: Int)
 
@@ -24,12 +23,9 @@ class Repository(private val dao: HabitDao) {
 
     suspend fun toggleToday(id: Int) {
         val today = LocalDate.now().toEpochDay()
-        val existing = dao.getCheckmarkForDate(id, today)
-        if (existing == null) {
-            dao.insertCheckmark(CheckmarkEntity(habitId = id, dateEpoch = today))
-        } else {
-            dao.deleteCheckmark(id, today)
-        }
+        val mark = dao.getCheckmarkForDate(id, today)
+        if (mark == null) dao.insertCheckmark(CheckmarkEntity(habitId = id, dateEpoch = today))
+        else dao.deleteCheckmark(id, today)
     }
 
     suspend fun toUi(list: List<HabitEntity>): List<HabitUi> {
@@ -45,11 +41,9 @@ class Repository(private val dao: HabitDao) {
     private fun calcStreak(days: List<Long>): Int {
         if (days.isEmpty()) return 0
         val set = days.toSet()
-        var current = LocalDate.now().toEpochDay()
+        var day = LocalDate.now().toEpochDay()
         var count = 0
-        while (set.contains(current)) {
-            count += 1; current -= 1
-        }
+        while (set.contains(day)) { count++; day-- }
         return count
     }
 }

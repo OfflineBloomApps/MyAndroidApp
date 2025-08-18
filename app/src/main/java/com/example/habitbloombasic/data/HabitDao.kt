@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * DAO для работы с привычками и отметками выполнения.
- * Добавлены потоки:
- * - observeDistinctDays: число уникальных дней, когда отмечена хотя бы одна привычка (XP).
- * - observeLastMarkDate: дата последней отметки (для определения пропусков).
+ * Новые методы:
+ *  - observeDistinctDays(): число уникальных дней (XP).
+ *  - observeLastMarkDate(): дата последней отметки (nullable).
  */
 @Dao
 interface HabitDao {
